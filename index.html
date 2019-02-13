@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>JPEG Image Compressor
+    </title>
+  </head>
+  <body>
+    <h1>JPEG Image Compression</h1>
+    <p>Import Folder</p><input type="file" webkitdirectory id="importFolder"/>
+    <p>Export Folder</p><input type="file" webkitdirectory id="exportFolder"/>
+    <button id="start">Start Compression</button>
+    <button id="cancel">Cancel</button>
+    <button id="test">Test</button>
+    
+    <div>
+      <label for="compressionRate">Compression Rate</label>
+      <input type="range" id="compressionRate" min="0" max="100" value="80" step="1">
+      <label id="compressionValue">80</label>
+    </div>
+
+    <textarea id="textArea" rows="10" cols="50" wrap="hard" disabled></textarea>
+     <script>
+      require('./renderer.js')
+      require('./compression.js')
+    </script>
+  </body>
+</html>

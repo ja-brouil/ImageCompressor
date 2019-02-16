@@ -15,16 +15,19 @@ const compressImages = (outputLocation) => {
     imageQueue.forEach((image) => {
         promises.push(new Promise((resolve, reject) => {
             document.getElementById('textArea').value += "\nProcessing image: " + path.basename(image) + ".";
+            document.getElementById("textArea").scrollTop = document.getElementById("textArea").scrollHeight;
             sharp(image).jpeg({
                 quality: compressValue
             }).toBuffer().then((data) => {
                 sharp(data).toFile(outputLocation + path.basename(image), (err, info) => {
                     if (err) {
                         document.getElementById('textArea').value += "\nError on image: " + path.basename(image) + ". " + err;
+                        document.getElementById("textArea").scrollTop = document.getElementById("textArea").scrollHeight;
                     }
                 });
             }).catch((err) => {
                 document.getElementById('textArea').value += "\nError on image: " + path.basename(image) + ". " + err;
+                document.getElementById("textArea").scrollTop = document.getElementById("textArea").scrollHeight;
             });
         }));
     });

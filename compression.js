@@ -5,39 +5,38 @@ const path = require('path');
 // Queue for images and cancel
 let processing = false;
 let imageQueue = [];
-let promises = [];
+let outputLocationpath;
+let compressionValue;
 
 // Compression
-const compressImages = (outputLocation) => {
-    let compressValue = parseInt(document.getElementById('compressionRate').value);
-
-    // Create Promises
-    imageQueue.forEach((image) => {
-        promises.push(new Promise((resolve, reject) => {
-            document.getElementById('textArea').value += "\nProcessing image: " + path.basename(image) + ".";
-            document.getElementById("textArea").scrollTop = document.getElementById("textArea").scrollHeight;
-            sharp(image).jpeg({
-                quality: compressValue
-            }).toBuffer().then((data) => {
-                sharp(data).toFile(outputLocation + path.basename(image), (err, info) => {
-                    if (err) {
-                        document.getElementById('textArea').value += "\nError on image: " + path.basename(image) + ". " + err;
-                        document.getElementById("textArea").scrollTop = document.getElementById("textArea").scrollHeight;
+const compressImages = () => {
+    setInterval(() => {
+        if (imageQueue.length && processing) {
+            processing = true;
+            sharp(imageQueue[0]).jpeg({
+                quality: compressionValue
+            }).toFile(outputLocationpath + path.basename(imageQueue[0].toString()), (err, info) => {
+                if (err) {
+                    document.getElementById('textArea').value += "\nError on image: " + path.basename(imageQueue[0].toString()) + ". " + err;
+                    document.getElementById("textArea").scrollTop = document.getElementById("textArea").scrollHeight;
+                } else {
+                    if (imageQueue[0] !== undefined){
+                        document.getElementById('textArea').value += "\nCompressed Image: " + path.basename(imageQueue[0].toString());
                     }
-                });
-            }).catch((err) => {
-                document.getElementById('textArea').value += "\nError on image: " + path.basename(image) + ". " + err;
-                document.getElementById("textArea").scrollTop = document.getElementById("textArea").scrollHeight;
+                }
             });
-        }));
-    });
 
-    // Do all promises
-    processing = true;
-    Promise.all(promises).then(() => console.log("Done"));
-    //document.getElementById('textArea').value += "\nImage Processing complete.";
-    //document.getElementById('start').innerText = "Start Compression";
-    processing = false;
+            // Shift Queue
+            imageQueue.shift();
+        }
+
+        // Queue is done
+        if (imageQueue.length == 0 && processing) {
+            processing = false;
+            document.getElementById('start').innerText = "Start Compression";
+            document.getElementById('textArea').value += "\nCompression finished!";
+        }
+    }, 500);
 }
 
 // Helper functions
@@ -53,13 +52,14 @@ const checkFolders = (importFolder, exportFolder) => {
 document.getElementById('start').addEventListener('click', () => {
     // Images are being processed
     if (processing) {
-        document.getElementById('textArea').value += "\nImages are already being processed!";
+        clearQueue();
         return;
     }
 
     // Reset
     document.getElementById('textArea').value = "";
     imageQueue = [];
+    clearInterval(compressImages);
 
     // Import export folders
     let importFolderLocation = document.getElementById('importChooser').files;
@@ -69,7 +69,7 @@ document.getElementById('start').addEventListener('click', () => {
     }
 
     // Swap Button name
-    document.getElementById('start').innerText = "Compressing Images";
+    document.getElementById('start').innerText = "Cancel process...";
 
     // Read All Files
     document.getElementById('textArea').value += "Reading directory files";
@@ -94,7 +94,12 @@ document.getElementById('start').addEventListener('click', () => {
         // Reading done
         document.getElementById('textArea').value += "\nFinished reading directory.";
         document.getElementById('textArea').value += "\nStarting compression...";
-        compressImages(exportFolderLocation[0].path + "/");
+
+        // Start Compression
+        outputLocationpath = exportFolderLocation[0].path + "/";
+        compressionValue = parseInt(document.getElementById('compressionRate').value);
+        processing = true;
+        compressImages();
     });
 });
 
@@ -113,6 +118,7 @@ document.getElementById('exportButton').onclick = () => {
 }
 
 // Name for Buttons
+// Import
 document.getElementById('importChooser').addEventListener('change', () => {
     if (document.getElementById('importChooser').files[0] != undefined) {
         document.getElementById('importText').innerText = "Import Folder " + document.getElementById('importChooser').files[0].name;
@@ -121,6 +127,7 @@ document.getElementById('importChooser').addEventListener('change', () => {
     }
 });
 
+// Export
 document.getElementById('exportChooser').addEventListener('change', () => {
     if (document.getElementById('exportChooser').files[0] != undefined) {
         document.getElementById('exportText').innerText = "Export Folder " + document.getElementById('exportChooser').files[0].name;
@@ -135,4 +142,19 @@ document.getElementById('clearButton').onclick = () => {
     document.getElementById('importChooser').value = null;
     document.getElementById('exportText').innerText = "Export Folder ";
     document.getElementById('importText').innerText = "Import Folder ";
+}
+
+// Cancel Process
+const clearQueue = () => {
+    imageQueue = [];
+
+    clearInterval(compressImages);
+
+    // Cancel message
+    document.getElementById('textArea').value += "\nComnpression cancelled by user.";
+
+
+    // Allow compression again
+    processing = false;
+    document.getElementById('start').innerText = "Start Compression";
 }

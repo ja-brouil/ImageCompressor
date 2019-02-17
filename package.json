@@ -9,7 +9,8 @@
     "build-task:autoprefixer": "postcss dist/css/*.css --use autoprefixer -d dist/css",
     "sass:build": "npm-run-all -p build-task:*",
     "sass:watch": "chokidar 'scss/*.scss' -c 'npm run build-task:scss-compile'",
-    "dev": "npm-run-all -p sass:*"
+    "dev": "npm-run-all -p sass:*",
+    "fixSharp" : "./node_modules/.bin/electron-rebuild"
   },
   "repository": "https://github.com/ja-brouil/ImageCompressor",
   "keywords": [

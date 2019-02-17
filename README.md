@@ -14,3 +14,6 @@ Simple Image Compressor
 4. npm start
 
 # Screenshots
+![alt text](https://raw.githubusercontent.com/ja-brouil/ImageCompressor/master/images/ss/2.png)
+![alt text](https://raw.githubusercontent.com/ja-brouil/ImageCompressor/master/images/ss/3.png)
+![alt text](https://raw.githubusercontent.com/ja-brouil/ImageCompressor/master/images/ss/1.png)

@@ -5,7 +5,7 @@ Simple Image Compressor
 1. Add CSS -> 90% 
 2. Add interrupt -> Completed
 3. Add callback when the process is done. -> Completed
-4.
+4. Add file conversion from JPEG to PNG
 
 # Installing
 1. Clone the repository

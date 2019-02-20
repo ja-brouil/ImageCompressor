@@ -1,15 +1,187 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Menu} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
+
+// Mac OS X Menu Bar Code
+const isMac = process.platform === "darwin";
+const template = [
+    // { role: 'appMenu' }
+    ...(process.platform === 'darwin' ? [{
+      label: app.getName(),
+      submenu: [{
+          role: 'about'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'services'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'hide'
+        },
+        {
+          role: 'hideothers'
+        },
+        {
+          role: 'unhide'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'quit'
+        }
+      ]
+    }] : []),
+    // { role: 'fileMenu' }
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: "New Window",
+          click() {
+            if (mainWindow === null){
+              createWindow();
+              Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+            }
+          },
+          accelerator: 'Cmd+N'
+        },
+        isMac ? {
+          role: 'close'
+        } : {
+          role: 'quit'
+        },
+      ]
+    },
+    // { role: 'editMenu' }
+    {
+      label: 'Edit',
+      submenu: [{
+          role: 'undo'
+        },
+        {
+          role: 'redo'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'cut'
+        },
+        {
+          role: 'copy'
+        },
+        {
+          role: 'paste'
+        },
+        ...(isMac ? [{
+            role: 'pasteAndMatchStyle'
+          },
+          {
+            role: 'delete'
+          },
+          {
+            role: 'selectAll'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: 'Speech',
+            submenu: [{
+                role: 'startspeaking'
+              },
+              {
+                role: 'stopspeaking'
+              }
+            ]
+          }
+        ] : [{
+            role: 'delete'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            role: 'selectAll'
+          }
+        ])
+      ]
+    },
+    // { role: 'viewMenu' }
+    {
+      label: 'View',
+      submenu: [{
+          role: 'reload'
+        },
+        {
+          role: 'forcereload'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'resetzoom'
+        },
+        {
+          role: 'zoomin'
+        },
+        {
+          role: 'toggledevtools'
+        },
+        {
+          role: 'zoomout'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'togglefullscreen'
+        }
+      ]
+    },
+    // { role: 'windowMenu' }
+    {
+      label: 'Window',
+      submenu: [{
+          role: 'minimize'
+        },
+        {
+          role: 'zoom'
+        },
+        ...(isMac ? [{
+            type: 'separator'
+          },
+          {
+            role: 'front'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            role: 'window'
+          }
+        ] : [{
+          role: 'close'
+        }])
+      ]
+    }  
+];
+
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 876,
+    height: 996,
     webPreferences: {
       nodeIntegration: true
     }
@@ -33,7 +205,11 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow();
+  // Add Menu Bar
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -50,7 +226,4 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
-})
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+});

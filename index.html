@@ -2,24 +2,24 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>JPEG Image Compressor</title>
+    <title>Image Compressor</title>
     <link rel="stylesheet" type="text/css" href="./css/style.css">
   </head>
   <body>
     <div class="center">
-      <h1>JPEG Image Compression</h1>
+      <h1>Image Compression</h1>
     </div>
     <div class="center">
       <div class="fillbutton blue" id="importButton">
-          <p id="importText">Import Folder</p>
+          <p id="importText"><span class="uline">I</span>mport Folder</p>
           <input type="file" id="importChooser" webkitdirectory hidden/>
       </div>
       <div class="fillbutton red" id="exportButton">
-          <p id="exportText">Export Folder</p>
+          <p id="exportText"><span class="uline">E</span>xport Folder</p>
           <input type="file" id="exportChooser" webkitdirectory hidden/>
       </div>
       <div class="fillbutton orange" id="clearButton">
-          <p id="clearButtonText">Clear Folders</p>
+          <p id="clearButtonText"><span class="uline">C</span>lear Folders</p>
       </div>
     </div>
     <div class="center">
@@ -27,8 +27,8 @@
     </div> 
     <div class="center">
       <label for="compressionRate">Compression Rate</label>
-      <input type="range" id="compressionRate" class="slider" min="0" max="100" value="80" step="1">
-      <label id="compressionValue">80</label>
+      <input type="range" id="compressionRate" class="slider" min="0" max="100" value="20" step="1">
+      <label id="compressionValue">20</label>
     </div>
     <div class="center">
       <textarea id="textArea" class="textConsole" rows="10" cols="50" wrap="hard" disabled></textarea>

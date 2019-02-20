@@ -7,6 +7,7 @@ body {
     padding: 4em;
 }
 
+// Center 
 .center {
     display: fixed;
     justify-content: center;
@@ -14,6 +15,7 @@ body {
     text-align: center;
 }
 
+// Buttons
 .fillbutton{
     color: rgba(255, 255, 255, 1);
     background: none;
@@ -92,11 +94,48 @@ body {
 .textConsole{
     margin: 5px;
     width: 635px;
-    height: 300px;
     background-color: #333;
     color: #fff;
     border-width: 3px;
     border-style: solid;
     border-radius: 10px;
     font-size: 18px;
+}
+
+// Help Area
+.help{
+    box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),
+    0 0 0.8em rgba(255, 255, 255, 0.3);
+    border: #fff solid 2px;
+}
+
+.helpStart{
+    visibility: hidden;
+}
+
+.helpFadeIn {
+    animation:  fadeIn 1.5s normal;
+    @keyframes fadeIn{
+        0%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}
+
+.helpFadeOut{
+     animation: fadeOut 1.5s normal;
+     @keyframes fadeOut {
+         0% {
+             opacity: 1;
+         }
+
+         100% {
+             opacity: 0;
+             visibility: hidden;
+         }
+     }
 }

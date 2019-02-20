@@ -18,10 +18,11 @@ const compressImages = () => {
             }).toFile(outputLocationpath + path.basename(imageQueue[0].toString()), (err, info) => {
                 if (err) {
                     document.getElementById('textArea').value += "\nError on image: " + path.basename(imageQueue[0].toString()) + ". " + err;
-                    document.getElementById("textArea").scrollTop = document.getElementById("textArea").scrollHeight;
+                    document.getElementById('textArea').scrollTop = document.getElementById("textArea").scrollHeight;
                 } else {
                     if (imageQueue[0] !== undefined){
                         document.getElementById('textArea').value += "\nCompressed Image: " + path.basename(imageQueue[0].toString());
+                        document.getElementById('textArea').scrollTop = document.getElementById("textArea").scrollHeight;
                     }
                 }
             });
@@ -34,7 +35,9 @@ const compressImages = () => {
         if (imageQueue.length == 0 && processing) {
             processing = false;
             document.getElementById('start').innerText = "Start Compression";
+            document.getElementById('textArea').scrollTop = document.getElementById("textArea").scrollHeight;
             document.getElementById('textArea').value += "\nCompression finished!";
+            document.getElementById('textArea').scrollTop = document.getElementById("textArea").scrollHeight;
         }
     }, 500);
 }
@@ -84,20 +87,22 @@ document.getElementById('start').addEventListener('click', () => {
 
         files.forEach((file) => {
             // Only want JPEGS or PNG or GIF
-            if (path.extname(file) === ".jpg" || path.extname(file) === ".JPEG" || path.extname(file) === ".png" || path.extname(file) === ".JPG") {
+            if (path.extname(file) === ".jpg" || path.extname(file) === ".JPEG" || path.extname(file) === ".png" || path.extname(file) === ".JPG" || path.extname(file) === ".jpeg" || path.extname(file) === ".PNG" || path.extname(file) === ".GIF") {
                 let imageLocationPath = importFolderLocation[0].path + "/" + file;
                 imageQueue.push(imageLocationPath);
             } else {
                 document.getElementById('textArea').value += "\n" + file + " is not a jpeg, png or gif image.";
+                document.getElementById('textArea').scrollTop = document.getElementById("textArea").scrollHeight;
             }
         });
         // Reading done
         document.getElementById('textArea').value += "\nFinished reading directory.";
         document.getElementById('textArea').value += "\nStarting compression...";
+        document.getElementById('textArea').scrollTop = document.getElementById("textArea").scrollHeight;
 
         // Start Compression
         outputLocationpath = exportFolderLocation[0].path + "/";
-        compressionValue = parseInt(document.getElementById('compressionRate').value);
+        compressionValue = 100 - parseInt(document.getElementById('compressionRate').value);
         processing = true;
         compressImages();
     });
